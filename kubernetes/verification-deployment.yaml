@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: verification-service
+  labels:
+    app: verification-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: verification-service
+  template:
+    metadata:
+      labels:
+        app: verification-service
+    spec:
+      containers:
+      - name: verification-service
+        image: verification-service
+        ports:
+        - containerPort: 8080

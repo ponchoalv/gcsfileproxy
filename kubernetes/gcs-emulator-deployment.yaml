@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gcs-emulator
+  labels:
+    app: gcs-emulator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gcs-emulator
+  template:
+    metadata:
+      labels:
+        app: gcs-emulator
+    spec:
+      containers:
+      - name: gcs-emulator
+        image: fsouza/fake-gcs-server:1.49.0
+        ports:
+        - containerPort: 4443
+        args:
+        - "-scheme=http"
+        - "-public-host=gcs-emulator:4443"
+        - "-filesystem-root=/storage"
+        volumeMounts:
+        - name: gcs-emulator-storage
+          mountPath: /storage
+      - name: configure-emulator
+        image: curlimages/curl:latest
+        command: ["/bin/sh"]
+        args:
+        - "-c"
+        - |
+          # Wait for the main container to start
+          sleep 10
+          
+          # Configure the external URL for proper client compatibility
+          curl -X PUT "http://localhost:4443/_internal/config" \
+            -H "Content-Type: application/json" \
+            -d '{"externalUrl": "http://gcs-emulator:4443"}' \
+            --retry 10 --retry-delay 2
+            
+          # Keep the sidecar running
+          tail -f /dev/null
+      volumes:
+      - name: gcs-emulator-storage
+        persistentVolumeClaim:
+          claimName: gcs-emulator-pvc

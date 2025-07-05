@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gcs-test-data
+data:
+  some_file.txt: |
+    This is a test file for the proxy.
+  test_document.txt: |
+    This document tests the download functionality.

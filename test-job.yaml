@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: integration-test-run
+spec:
+  template:
+    spec:
+      containers:
+      - name: integration-tests
+        image: gcsfileproxy-tests
+        env:
+        - name: STORAGE_EMULATOR_HOST
+          value: "gcs-emulator:4443"
+        - name: VERIFICATION_SERVICE_URL
+          value: "http://verification-service:8080/verify"
+        - name: PROXY_HOST
+          value: "http://gcsfileproxy:80"
+        - name: GOOGLE_CLOUD_PROJECT
+          value: "test-project"
+      restartPolicy: Never
+  backoffLimit: 2

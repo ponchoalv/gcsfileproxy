@@ -1,0 +1,12 @@
+{
+  "name": "verification-service-mock",
+  "version": "1.0.0",
+  "description": "A mock verification service for the GCS file proxy.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

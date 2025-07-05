@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gcsfileproxy
+  labels:
+    app: gcsfileproxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gcsfileproxy
+  template:
+    metadata:
+      labels:
+        app: gcsfileproxy
+    spec:
+      containers:
+      - name: gcsfileproxy
+        image: gcsfileproxy
+        ports:
+        - containerPort: 3000
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        env:
+        - name: VERIFICATION_SERVICE_URL
+          value: "http://verification-service:8080/verify"
+        - name: GOOGLE_CLOUD_PROJECT
+          value: "local-dev"
+        - name: GCS_EMULATOR_ENDPOINT
+          value: "http://gcs-emulator:4443"

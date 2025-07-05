@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: gcs-emulator
+spec:
+  selector:
+    app: gcs-emulator
+  ports:
+    - protocol: TCP
+      port: 4443
+      targetPort: 4443
