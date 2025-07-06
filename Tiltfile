@@ -1,9 +1,3 @@
-local_resource(
-    name='kind-cluster',
-    cmd='make cluster-create',
-    deps=['Makefile', 'kind-config.yaml']
-)
-
 # Docker builds
 docker_build('gcsfileproxy', '.', dockerfile='./Dockerfile')
 docker_build('verification-service', './mocks/verification-service', dockerfile='./mocks/verification-service/Dockerfile')
